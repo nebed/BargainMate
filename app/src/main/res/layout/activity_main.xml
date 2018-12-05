@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/root_view"
+    tools:context="com.example.android.bargainmate.MainActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:id="@+id/list"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/prog"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:padding="4dp"
+            android:visibility="invisible">
+
+            <com.agrawalsuneet.loaderspack.loaders.CurvesLoader
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/spin"
+                app:curves_animDuration="1000"
+                app:curves_curveColor="@color/colorAccent"
+                app:curves_curveSweepAngle="160"
+                app:curves_curveWidth="3dp"
+                app:curves_distanceBetweenCurves="5dp"
+                app:curves_outermostCurveRadius="50dp"
+                app:curves_interpolator="@android:anim/linear_interpolator"
+                app:curves_noOfCurves="5"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fetching Results"
+                android:textAlignment="center"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/ad_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/admob_list_banner_id"
+            />
+
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

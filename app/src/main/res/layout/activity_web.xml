@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.bargainmate.WebActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/web_view"/>
+
+
+        <com.agrawalsuneet.loaderspack.loaders.CurvesLoader
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/spin1"
+            app:curves_animDuration="1000"
+            app:curves_curveColor="@color/colorAccent"
+            app:curves_curveSweepAngle="160"
+            app:curves_curveWidth="3dp"
+            app:curves_distanceBetweenCurves="5dp"
+            app:curves_outermostCurveRadius="50dp"
+            app:curves_interpolator="@android:anim/linear_interpolator"
+            app:curves_noOfCurves="5"
+
+            />
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/ad_view1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/admob_web_banner_id"
+            />
+
+
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

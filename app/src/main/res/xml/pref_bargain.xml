@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.support.v7.preference.PreferenceCategory
+        android:title="Select Stores"
+
+        >
+
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="@string/pref_jumia"
+            android:defaultValue="true"
+            android:title="Search Jumia"
+            android:summaryOff="Jumia Disabled"
+            android:summaryOn="Jumia Enabled"
+            />
+
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="@string/pref_konga"
+            android:defaultValue="true"
+            android:title="Search Konga"
+            android:summaryOff="Konga Disabled"
+            android:summaryOn="Konga Enabled"/>
+
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="@string/pref_slot"
+            android:defaultValue="true"
+            android:title="Search Slot"
+            android:summaryOff="Slot Disabled"
+            android:summaryOn="Slot Enabled"/>
+
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="@string/pref_kara"
+            android:defaultValue="true"
+            android:title="Search Kara"
+            android:summaryOff="Kara Disabled"
+            android:summaryOn="Kara Enabled"/>
+
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="@string/pref_jiji"
+            android:defaultValue="true"
+            android:title="Search Jiji"
+            android:summaryOff="Jiji Disabled"
+            android:summaryOn="Jiji Enabled"/>
+
+
+    </android.support.v7.preference.PreferenceCategory>
+
+</PreferenceScreen>
