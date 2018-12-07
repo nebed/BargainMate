@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private AdView adView;
     CurvesLoader spinKit;
     InterstitialAd mInterAd;
+    LinearLayout empty;
+
 
 
     public static final String[] BARGAIN_PROJECTION={
@@ -69,8 +71,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         adView = findViewById(R.id.ad_view);
         spinKit = findViewById(R.id.spin);
         root=findViewById(R.id.root_view);
+        empty=findViewById(R.id.empty);
 
-        checkInternet(root);
+
+
+         checkInternet(root);
 
 
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         bargainAdapter = new BargainAdapter(this, this);
 
         list.setAdapter(bargainAdapter);
+
 
         MobileAds.initialize(this, getString(R.string.admob_app_id));
 
@@ -271,7 +277,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         String selection = BargainContract.BargainEntry.COLUMN_VENDOR+" IN(?,?,?,?,?)";
         String [] selectionArgs=selectionList.toArray(new String[0]);
-        //String [] slel=new String[]{"jumia", "jiji", "konga", "slot", "kara"};
 
         return new CursorLoader(this,
                 bargainQueryUri,
@@ -288,9 +293,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
         list.smoothScrollToPosition(mPosition);
 
-        progressBar.setVisibility(View.INVISIBLE);
+        if (!data.moveToFirst()){
+            empty.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);}
 
-    showInter();
+            if(data.getCount()>0){
+                empty.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+            showInter();
 
 
     }

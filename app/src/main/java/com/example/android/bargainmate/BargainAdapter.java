@@ -5,14 +5,17 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bargainmate.data.BargainContract;
-import com.example.android.bargainmate.data.BargainPreferences;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
@@ -35,6 +38,8 @@ public class BargainAdapter extends RecyclerView.Adapter {
     private static final int UNIFIED_NATIVE_AD_VIEW_TYPE = 1;
 
     private static final int REPEATING_GAP=5;
+
+    private int lastPosition =-1;
 
     public interface BargainAdapterOnClickHandler {
         void onClick(String url);
@@ -80,18 +85,10 @@ public class BargainAdapter extends RecyclerView.Adapter {
 
             int titleIndex = mCursor.getColumnIndex(BargainContract.BargainEntry.COLUMN_TITLE);
             int VendorIndex = mCursor.getColumnIndex(BargainContract.BargainEntry.COLUMN_VENDOR);
-            int UrlIndex = mCursor.getColumnIndex(BargainContract.BargainEntry.COLUMN_URL);
             int imageUrlIndex = mCursor.getColumnIndex(BargainContract.BargainEntry.COLUMN_IMAGE_URL);
             int priceIndex = mCursor.getColumnIndex(BargainContract.BargainEntry.COLUMN_PRICE);
 
             mCursor.moveToPosition(position); // get to the right location in the cursor
-
-            Boolean searchJumia = BargainPreferences.searchOn(mContext, "ju");
-            Boolean searchJiji = BargainPreferences.searchOn(mContext, "ji");
-            Boolean searchKara = BargainPreferences.searchOn(mContext, "ka");
-            Boolean searchKonga = BargainPreferences.searchOn(mContext, "ko");
-            Boolean searchSlot = BargainPreferences.searchOn(mContext, "sl");
-
 
 
             // Determine the values of the wanted data
@@ -99,7 +96,6 @@ public class BargainAdapter extends RecyclerView.Adapter {
         String title= mCursor.getString(titleIndex);
         String vendor = mCursor.getString(VendorIndex);
         String imageUrl =mCursor.getString(imageUrlIndex);
-        String url=mCursor.getString(UrlIndex);
         String pric=mCursor.getString(priceIndex);
 
         int colorGuy =0;
@@ -147,7 +143,12 @@ public class BargainAdapter extends RecyclerView.Adapter {
         Picasso.with(mContext)
                 .load(imageUrl)
                 .placeholder(R.drawable.ic_broken_image_black_24dp)
-                .into(holderB.image);}
+                .into(holderB.image);
+
+
+            setAnimation(holderB.itemView, position);
+        }
+
 
 
 
@@ -206,23 +207,47 @@ public class BargainAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        if (null == mCursor) {return 0;}
+        if (null == mCursor)
+        {
+            return 0;}
         //added this to account for the additional itemViews that will used
         //by the ads
         return mCursor.getCount();// +(mCursor.getCount()/REPEATING_GAP);
     }
 
+
     void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
     }
+    private void setAnimation (View view, int position){
+        int viewTy=getItemViewType(position);
+        if (viewTy==NORMAL_ITEM_VIEW_TYPE){
+        if (position >lastPosition){
+            Animation animation= AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
+            view.startAnimation(animation);
+            lastPosition=position;
+        }}
+        else
+        {
+            Log.d("BargainAdapter", "setAnimation:  this is for an ad ");
+        }
+    }
+
+
+    @Override
+    public void onViewDetachedFromWindow(final RecyclerView.ViewHolder holder) {
+        ((BargainViewHolder)holder).clearAnim();
+    }
+
+
 
     @Override
     public int getItemViewType(int position) {
         if (position%REPEATING_GAP ==0){
             //this is the ItemViewType of the Native Ad
             //coming soon to bargains near you
-            return UNIFIED_NATIVE_AD_VIEW_TYPE;
+            return NORMAL_ITEM_VIEW_TYPE;
         }
         return NORMAL_ITEM_VIEW_TYPE;
     }
@@ -236,6 +261,7 @@ public class BargainAdapter extends RecyclerView.Adapter {
         TextView price;
         TextView line;
         ImageView image;
+        FrameLayout frame;
 
 
 
@@ -247,6 +273,8 @@ public class BargainAdapter extends RecyclerView.Adapter {
             vendor=view.findViewById(R.id.vendor);
             price=view.findViewById(R.id.price);
             line=view.findViewById(R.id.line);
+            frame=view.findViewById(R.id.frame);
+
 
             view.setOnClickListener(this);
         }
@@ -260,6 +288,10 @@ public class BargainAdapter extends RecyclerView.Adapter {
             mClickHandler.onClick(url);
 
         }
+
+        public void clearAnim(){
+            frame.clearAnimation();
+        }
     }
 
     class AdViewHolder extends RecyclerView.ViewHolder{
@@ -270,6 +302,9 @@ public class BargainAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             adCardView=itemView.findViewById(R.id.ad_card_view);
+        }
+        public void clearAnimAd(){
+            adCardView.clearAnimation();
         }
     }
 }
