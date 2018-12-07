@@ -289,7 +289,7 @@ public class BargainAdapter extends RecyclerView.Adapter {
 
         }
 
-        public void clearAnim(){
+        private void clearAnim(){
             frame.clearAnimation();
         }
     }
@@ -298,13 +298,11 @@ public class BargainAdapter extends RecyclerView.Adapter {
         // this class is the ViewHolder for the Ad items
         CardView adCardView;
 
-        public AdViewHolder(View itemView) {
+        private AdViewHolder(View itemView) {
             super(itemView);
 
             adCardView=itemView.findViewById(R.id.ad_card_view);
         }
-        public void clearAnimAd(){
-            adCardView.clearAnimation();
-        }
+
     }
 }
