@@ -142,7 +142,7 @@ public class BargainAdapter extends RecyclerView.Adapter {
 
         Picasso.with(mContext)
                 .load(imageUrl)
-                .placeholder(R.drawable.ic_broken_image_black_24dp)
+                .placeholder(R.drawable.ic_photo_)
                 .into(holderB.image);
 
 
