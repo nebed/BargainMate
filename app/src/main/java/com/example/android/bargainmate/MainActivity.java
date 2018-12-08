@@ -443,5 +443,4 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //        }
 //    });
 //            snackbar.show();
-
 }
