@@ -3,6 +3,7 @@ package com.example.android.bargainmate;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -11,8 +12,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -20,6 +23,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
 import com.agrawalsuneet.loaderspack.loaders.CurvesLoader;
@@ -37,7 +42,8 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, BargainAdapter.BargainAdapterOnClickHandler {
-    SearchView searchView;
+
+    CardView searchCard;
     RecyclerView list;
     private BargainAdapter bargainAdapter;
     private int mPosition=RecyclerView.NO_POSITION;
@@ -49,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     CurvesLoader spinKit;
     InterstitialAd mInterAd;
     LinearLayout empty;
+
+    SearchView search;
 
 
 
@@ -72,10 +80,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         spinKit = findViewById(R.id.spin);
         root=findViewById(R.id.root_view);
         empty=findViewById(R.id.empty);
+        search=findViewById(R.id.search_view);
+        searchCard=findViewById(R.id.search_card);
 
 
 
-         checkInternet(root);
+        //this part isnt working i dont know why yet
+        //i want to show logo beside the app name sha sha
+        ActionBar actionBar =getSupportActionBar();
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setLogo(R.mipmap.ic_launcher);
+        actionBar.setIcon(R.mipmap.ic_launcher);
+
+
+        checkInternet(root);
 
 
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -89,6 +107,80 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         getSupportLoaderManager().initLoader(BARGAIN_LOADER_ID, null, this);
+
+        final SearchView.SearchAutoComplete searchAutoComplete=
+                search.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setBackgroundColor(Color.WHITE);
+        searchAutoComplete.setTextColor(Color.BLACK);
+        searchAutoComplete.setDropDownBackgroundResource(android.R.color.background_light);
+
+        String [] autoCompleteArray={"Tecno Spark 2", "Tecno K7", "Iphone 8", "Iphone 7", "Infinix Hot 6",
+                "Samsung Galaxy s9", "Samsung Galaxy s9 Edge"};
+        ArrayAdapter<String> searchAdapter=new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, autoCompleteArray);
+        searchAutoComplete.setAdapter(searchAdapter);
+        searchAutoComplete.setMaxWidth(300);
+
+        searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String queryString =(String) adapterView.getItemAtPosition(i);
+                searchAutoComplete.setText(queryString);
+                checkForsearch(root, queryString);
+                search.setQueryHint(queryString);
+
+                if (!search.isIconified()){
+                    search.setIconified(true);
+                }
+
+            }
+        });
+
+        search.setQueryHint("Product Name");
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                checkForsearch(root, query);
+                search.setQueryHint(query);
+
+                if (!search.isIconified()){
+                    search.setIconified(true);
+                }
+                return false;
+
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search.setIconified(false);
+            }
+        });
+
+        list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy<0){
+                    searchCard.setVisibility(View.VISIBLE);
+                }
+                else if (dy>0){
+                    searchCard.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
 
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("48709D5C5E343F786ADFBA371BFBF7BA")
@@ -208,29 +300,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        final MenuItem myActionMenuItem = menu.findItem(R.id.search);
-        searchView=(SearchView) myActionMenuItem.getActionView();
-        searchView.setQueryHint("Product Name");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                checkForsearch(root, query);
-                myActionMenuItem.collapseActionView();
-                searchView.setQueryHint(query);
-
-                if (!searchView.isIconified()){
-                    searchView.setIconified(true);
-                }
-                return false;
-
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
         return true;
     }
 
@@ -303,8 +372,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 progressBar.setVisibility(View.INVISIBLE);
             }
             showInter();
-
-
     }
 
     @Override
@@ -325,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void showLoading(){
         progressBar.setVisibility(View.VISIBLE);
         list.setVisibility(View.INVISIBLE);
+        searchCard.setVisibility(View.GONE);
     }
 
     public void showInter(){
@@ -365,6 +433,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             NetworkUtils.startImmediateSync(MainActivity.this, query);
         }
     }
+
 
 //    final Snackbar snackbar=Snackbar.make(view, "You Need an Internet Connection to use Bargain Mate", Snackbar.LENGTH_INDEFINITE);
 //            snackbar.setAction("Dismiss", new View.OnClickListener() {

@@ -28,7 +28,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-
                 tools:src="@drawable/ic_search" />
 
             <LinearLayout
@@ -41,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="Infinix Note 604"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:textColor="@android:color/black"
                     android:padding="3dp"
                     android:id="@+id/title"
