@@ -241,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (id == R.id.about) {
             Intent intent=new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.goup, R.anim.godown);
             return true;
         }
 
@@ -317,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Uri uurl=Uri.parse(url);
         webViewIntent.putExtra("link",uurl.toString());
         startActivity(webViewIntent);
-        overridePendingTransition(0,0);
+        overridePendingTransition(R.anim.goup, R.anim.godown);
         showInter();
     }
 

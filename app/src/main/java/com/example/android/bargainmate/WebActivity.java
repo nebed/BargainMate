@@ -156,6 +156,14 @@ public class WebActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.godown, R.anim.godown);
+
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -166,6 +174,7 @@ public class WebActivity extends AppCompatActivity {
                 return true;
             case android.R.id.home:
                 onBackPressed();
+
                 return true;
             case R.id.other:
                 others();
